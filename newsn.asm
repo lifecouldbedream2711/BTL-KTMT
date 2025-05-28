@@ -1,45 +1,37 @@
-  
 .model small
 .stack 100h
 .data 
 
-     t0  Dw "                               /^\\/^\\                                  ",0AH,0DH  
-         Dw "                         _____| O|  O|   _                               ",0AH,0DH  
-         Dw "                      \\/     /~~    \\_/ \\                             ",0AH,0DH  
-         Dw "                       \\____|__________/  \\                            ",0AH,0DH 
-         Dw "                             \\_______      \\                          ",0AH,0DH  
-         Dw "                                     `\\     \\                         ",0AH,0DH  
-         Dw "                                       |     ||                         ",0AH,0DH  
-         Dw "                                      /     //       ____               " ,0AH,0DH 
-         Dw "                                    /     /\\      / _*_\              " ,0AH,0DH 
-         Dw "                                   /      \\ \\   / /                  ",0AH,0DH 
-         Dw "                                   |        \\ \\ / /                   ",0AH,0DH  
-         Dw "                                   \\_______|_|_/_/                    ",0AH,0DH 
-         Dw "                    WELCOME TO SNAKE GAME!" ,0AH,0DH                              
-         Dw "                     Press any key to start... $"                         
-     hd1 Dw '                       X    Snake game    O         '0AH,0DH                 
-         Dw '                Huong dan cach di chuyen con ran X  ',0AH,0DH
-         DW ' ',0AH,0DH
-         DW ' ',0AH,0DH
-         DW ' ',0AH,0DH
-         Dw '                      ',24,' w : di len tren      ',0AH,0DH
-         Dw '                      ',27,'  a : di sang trai     ',0AH,0DH
-         Dw '                      ',25,'  s : di xuong duoi    ',0AH,0DH
-         Dw '                      ',26,'  d : di sang phai     ',0AH,0DH
-         DW ' ',0AH,0DH
-         DW ' ',0AH,0DH
-         Dw '                       Chu y:                                    ',0AH,0DH             
-         Dw '                 Phim bam khong hop le se bi bo qua        ',0AH,0DH             
-         Dw '                   Con ran khong the di lui duoc            ',0AH,0DH            
-         Dw '                Con ran khong the di qua than chinh no   ',0AH,0DH            
-         Dw '               An ban ki phim gi de bat dau choi......$'             ;thong bao chao mung
-     kq1 db 'So diem ban da dat duoc: $'                             ;thong bao diem khi ket thuc
+     TITLE_TEXT DB 0Ah, 0Ah
+           DB 09h, 09h, 09h, 09h, "GROUP 22 KTMT "      
+           DB 0Dh, 0Ah 
+           DB 09h, "  ______   ____  _____       _       ___  ____   ________ ", 0Dh, 0Ah  
+           DB 09h, " / ____ \ |_   \|_   _|     / \     |_  ||_  _| |_   __  |", 0Dh, 0Ah 
+           DB 09h, "| (___ \_|  |   \ | |      / _ \      | |_/ /     | |_ \_|", 0Dh, 0Ah 
+           DB 09h, " _.____`.   | |\ \| |     / ___ \     |  __'.     |  _| _ ", 0Dh, 0Ah  
+           DB 09h, "| \____) | _| |_\   |_  _/ /   \ \_  _| |  \ \_  _| |__/ |", 0Dh, 0Ah 
+           DB 09h, " \______.'|_____|\____||____| |____||____||____||________|", 0Dh, 0Ah,0Dh, 0Ah, 0Dh, 0Ah, 0Dh, 0Ah   
+           DB 0Dh, 0Ah
+           DB 09h,09h,09h, "Press any key to start game$"
+     hd1 db '       X    Snake game    O         $'                 ;huong dan
+     hd2 db 'Huong dan cach di chuyen con ran X  $'
+     ;change font in man hinh la terminal de hien mui ten
+     hd4 db 24, ' w : di len tren      $'
+     hd5 db 27, ' a : di sang trai     $'
+     hd6 db 25, ' s : di xuong duoi    $'
+     hd7 db 26, ' d : di sang phai     $'
+     hd8 db 'Chu y:                                    $'             
+     hd9 db 'Phim bam khong hop le se bi bo qua        $'             ;canh bao di sai
+     hd10 db 'Con ran khong the di lui duoc            $'             ;khong the di nguoc
+     hd11 db 'Con ran khong the di qua than chinh no   $'             ;con ran co the di xuyen qua co the
+     hd12 db 'An ban ki phim gi de bat dau choi......  $'             ;thong bao chao mung
+     kq1 db 'So diem ban da dat duoc: $'                              ;thong bao diem khi ket thuc
      kq2 db 'Chuc mung ban da chien thang tro choi$'                  ;thong bao chien thang
-     tb_choi_lai db 'Ban co muon choi tiep khong? <y/n> $'            
-     end1 db '-------- PROJECT - SNAKE GAME -------$'     
-     end2 db '------------- GROUP 22 --------------$'               
-     end3 db   '*********************************************$'
-     end4 db '        Thank you for playing! $'                      
+     tb_choi_lai db 'Ban co muon choi tiep khong? <y/n> $'            ;hoi choi lai
+     end1 db '-------- PROJECT - SNAKE GAME -------$'
+     end2 db '------------- GROUP 22 --------------$'                 ;nhom thuc hien
+     end3 db '*********************************************$' 
+     end4 db '        Thank you for playing! $'                       ;loi cam on
      diem1 db 'Score : $'                                             ;hien diem
      dong db 13, 10, '$'                                              ;xuong dong
      begin_row db 5                                                   ;hang rao nam ngang phia tren
@@ -54,12 +46,10 @@
      app_y db ?
      len_snake db 0                                                   ;do dai hien tai cua ran
      score db 0                                                       ;diem nguoi choi
-     score_max db 10                                                  ;diem toi da
      old_key db 'g'                                                   ;huong cu cua con ran
-     border_row db 40 dup("#"), "$"
-     border_rest db  "#", 38  dup(" "),"#","$"                                   ;hang rao nam ngang
-     than_ran db 2D
-     
+     border_row db 40 dup("#"), "$"                                   ;hang rao nam ngang
+     score_max db 9                                                  ;diem toi da
+     than_ran db 'x'         
 .code
 
 ;sinh ngau nhien 1 so c trong khoang tu a toi b (la so chan)
@@ -176,23 +166,18 @@ in_thong_bao macro a
 in_thong_bao endm
 
 main proc
-    mov ax, @data    ;di chuyen dia chi du lieu vao thanh ghi ax               
-    mov ds, ax       ;cap nhat thanh ghi ds voi gia tri trong ax
-    mov es, ax       ;cap nhat thanh ghi es voi gia tri trong ax
-    ;thiet lap che do man hinh hien thi
-    mov ah, 0        ;tao man hinh moi ham ngat 10h
-    mov al, 3        ;chon kich thuoc man hinh 80x25
-    int 10h          ;thuc hien tao man hinh kich thuoc 80x25    
+    mov ax, @data       ;di chuyen dia chi du lieu vao thanh ghi ax               
+    mov ds, ax          ;cap nhat thanh ghi ds voi gia tri trong ax
+    mov es, ax          ;cap nhat thanh ghi es voi gia tri trong ax
     
-    ;in con ran ra man hinh bang cach di chuyen con tro rui in ca xau ki tu ra man hinh
-    di_chuyen_con_tro 5, 0         ;di chuyen con tro toi vi tri 5, 22 
-    push dx
-    mov ah,9
-    mov dh,0
-    mov dx, offset t0
-    int 21h
-        
-        
+    mov ah, 0           ;tao man hinh moi ham ngat 10h
+    mov al, 3           ;chon kich thuoc man hinh 80x25
+    int 10h             ;thuc hien tao man hinh kich thuoc 80x25    
+    
+    ;Print title
+    LEA DX, TITLE_TEXT
+    MOV AH, 9
+    INT 21h
     
     mov ah, 1                ;che do nhap 1 ki tu tu ban phim
     int 21h                  ;goi ham ngat 21h de lay 1 ki tu vua nhap (nhap 1 ki tu bat ki de sang phan tiep theo)
@@ -217,17 +202,19 @@ choi proc
     call hiendiem                       ;hien thi diem ban dau (diem ban dau se duoc mac dinh bang 0) 
     them_toa_do_snake snake_x, snake_y  ;them toa do ran ban dau  
     call in_ran                         ;in hinh con ran ban dau
-    ;khoi tao 10 qua tao ban dau
-    mov cx, 5      ;so qua tao ban dau luu vao thanh ghi cx = 10
+    ;khoi tao 5 qua tao ban dau
+    xor ch,ch
+    mov cl, score_max      ;so qua tao ban dau luu vao thanh ghi cx = 5
     sinh_tao_ban_dau:
          call sinh_apple        ;goi chuong trinh con sinh ngau nhien 1 qua tao
     loop sinh_tao_ban_dau
    
     game_loop:
-        mov dx, 0                       ;luu thanh dh, dl bang 0 
-        di_chuyen_con_tro dh, dl        ;giau con tro
+        ;mov dx, 0                       ;luu thanh dh, dl bang 0 
+        ;di_chuyen_con_tro dh, dl        ;giau con tro
         
-        ;xu li phim nhap 
+        ;xu li phim nhap    
+        mov al, 0
         mov ah, 1                       ;chon che do lay phim tu buffer ham ngat 16h/01h
         int 16h                         ;thuc hien lay 1 phim tu buffer
         jz no_key_input                 ;nhay toi nhan neu khong co phim nhap
@@ -243,25 +230,25 @@ choi proc
         cmp al, 'w'                     ;so sanh ki tu vua nhap voi chu cai 'w'
         je len_tren                     ;neu bang thi nhay den ham xu li con ran di len
         cmp ah, 72                      ;so sanh voi ma code mui ten huong len voi ki tu vua nhap
-        je len_tren                     ;neu bang thi nhay den ham xu li con ran di len
+        je len_tren                     ;neu bang thi nhay den ham con ran di len
         
         ;phim dieu khien con ran xuong duoi
         cmp al, 's'                     ;so sanh ki tu vua nhap voi chu cai 's'
         je xuong_duoi                   ;neu bang thi nhay den ham xu li con ran di xuong
         cmp ah, 80                      ;so sanh voi ma code mui ten huong xuong voi ki tu vua nhap
-        je xuong_duoi                   ;neu bang thi nhay den ham xu li con ran di xuong
+        je xuong_duoi                   ;neu bang thi nhay den ham con ran di xuong
         
         ;phim dieu khien con ran sang trai
         cmp al, 'a'                     ;so sanh ki tu vua nhap voi chu cai 'a'
         je sang_trai                    ;neu bang thi nhay den ham xu li con ran di sang trai
         cmp ah, 75                      ;so sanh voi ma code mui ten huong sang trai voi ki tu vua nhap
-        je sang_trai                    ;neu bang thi nhay den ham xu li con ran di sang trai
+        je sang_trai                    ;neu bang thi nhay den ham con ran di sang trai
         
         ;phim dieu khien con ran sang phai
         cmp al, 'd'                     ;so sanh ki tu vua nhap voi chu cai 'd'
-        je sang_phai                    ;neu bang thi nhay den ham xu li con ran di sang phai
+        je sang_phai                    ;neu bang thi nhay den ham con ran di sang phai
         cmp ah, 77                      ;so sanh voi ma code mui ten huong sang phai voi ki tu vua nhap
-        je sang_phai                    ;neu bang thi nhay den ham xu li con ran di sang phai
+        je sang_phai                    ;neu bang thi nhay den ham con ran di sang phai
         
         jmp game_loop       ;neu nham ki tu khong hop le thi chuong trinh se khong lam gi va quay lai nhap ki tu khac
     
@@ -300,14 +287,14 @@ sang_phai:
         mov ah, 8                       ;chon che do doc ki tu tai vi tri con tro ham ngat 10h/08h
         mov bh, 0                       ;so trang man hinh
         int 10h
-        cmp al,' '                         ;thuc hien lenh doc ki tu tai vi tri con tro   
+        
+        cmp al,' '                          ;thuc hien lenh doc ki tu tai vi tri con tro   
         je lap_tiep
         ;kiem tra con ran co dam hang rao khong
         cmp al, '#'                     ;so sanh ki tu voi hang rao '#'
         je game_over                    ;neu co thi thua luon  
         
         ;kiem tra con ran co dam vao chinh khuc cua minh khong
-
         cmp al, than_ran                     ;so sanh ki tu voi ki tu than cua con ran
         je game_over                    ;nhay toi nhan thua cuoc
        
@@ -327,23 +314,33 @@ sang_phai:
         je call ket_thuc                ;neu bang thi nhay den ham ket_thuc (de ket thuc man choi)
         call hiendiem                   ;hien thi so diem hien tai
         ;tang chieu dai con ran
-        them_toa_do_snake snake_x, snake_y      ;them toa do qua tao vua an vua mang luu phan than con ran
-        call in_ran                             ;in hinh con ran sau khi them 1 khuc
-        call sinh_apple                 ;neu khong bang thi sinh ra qua tao moi
- 
-        jmp game_loop                   ;tiep tuc tro choi
+        them_toa_do_snake snake_x, snake_y      ;them toa do qua tao vua an vao mang luu phan than con ran
+
+        ; In ð?u m?i (không c?n g?i l?i in_ran)
+        mov al, snake_x
+        mov bl, snake_y
+        gan_toa_do al, bl, than_ran                 ;in ð?u m?i
+                     
+        jmp game_loop                          ;tiep tuc tro choi
     
     lap_tiep:
-        ;cap nhat lai toa do moi cua con ran
-        lea di, toa_do_x                ;gan dia chi phan tu dau tien cua toa_do_x con ran vao di (duoi con ran)
-        lea si, toa_do_y                ;gan dia chi phan tu dau tien cua toa_do_y con ran vao si (duoi con ran)
+        ; Xóa ðuôi c?
+        lea di, toa_do_x
+        lea si, toa_do_y
+        mov al, [di]        ; l?y x ðuôi
+        mov bl, [si]        ; l?y y ðuôi
+        gan_toa_do al, bl, ' '   ; xóa ðuôi
 
-        gan_toa_do [di], [si], ' '      ;xoa khuc duoi bang ki tu khoang trang
-        toa_do_moi toa_do_x, snake_x    ;cap nhat toa do x
-        toa_do_moi toa_do_y, snake_y    ;cap nhat toa do y
-        
-        call in_ran                     ;in ra hinh con ran moi
-        jmp game_loop                   ;tiep tuc tro choi
+        ; C?p nh?t m?ng t?a ð?
+        toa_do_moi toa_do_x, snake_x
+        toa_do_moi toa_do_y, snake_y
+
+        ; In ð?u m?i
+        mov al, snake_x
+        mov bl, snake_y
+        gan_toa_do al, bl,than_ran   ; in ð?u m?i
+
+        jmp game_loop
     
     game_over: 
         call ket_thuc               ;neu khong vuot qua duoc ham check(thua cuoc) -> nhay den ham ket_thuc de xu li
@@ -371,31 +368,26 @@ sinh_apple proc
 sinh_apple endp
 
 ;in hinh con ran
-in_ran proc                                
-    lea di, toa_do_x                       ;gan dia chi phan tu dau tien cua toa_do_x con ran vao di (duoi con ran)
-    lea si, toa_do_y                       ;gan dia chi phan tu dau tien cua toa_do_y con ran vao si (duoi con ran)
+in_ran proc
+    lea di, toa_do_x             ; DI tr? t?i m?ng toa_do_x
+    lea si, toa_do_y             ; SI tr? t?i m?ng toa_do_y
     
     mov ch, 0                              ;reset lai thanh ghi ch
     mov cl, len_snake                      ;luu chieu dai con ran vao thanh ghi cl
     cmp cx, 1                              ;kiem tra chieu dai = 1 thi chi in dau con ran
-    jng ket                                ;thuc hien in dau con ran
-    gan_toa_do [di], [si], than_ran             ;in duoi con ran
+    jng ket                     ; N?u d? dài <= 1 thì in d?u r?n luôn
     
-    inc di                                 ;tang chi so di (de in phan than con ran)
-    inc si                                 ;tang chi so si (de in phan than con ran)
-    lapin:
-        dec cx                             ;giam so than ran can in (vi da in cai duoi)
-        cmp cx, 1                          ;kiem tra in het than con ran chua
-        jng ket                            ;in het than con ran thi ket thuc va in dau con ran
+    ; Nh?y d?n ph?n t? cu?i cùng (d?u r?n)
+    add di, cx                   ; tr? t?i ph?n t? sau cùng c?a m?ng toa_do_x
+    add si, cx                   ; tr? t?i ph?n t? sau cùng c?a m?ng toa_do_y
+    dec di                       ; lùi l?i dúng ch? s? d?u r?n
+    dec si
 
-        
-        inc si                             ;tang chi so di
-        inc di                             ;tang chi so si
-        jmp lapin                          ;lap lai vong lap in than con ran
-    ket:
-        gan_toa_do [di], [si], than_ran         
+ket:
+    gan_toa_do [di], [si], than_ran
     ret
-in_ran endp 
+in_ran endp
+ 
 
 ;in ra man hinh ket thuc thang hay thua
 ket_thuc proc
@@ -432,7 +424,7 @@ choi_lai:
     mov dh, 10                              ;gan toa_do_x con ran = dh
     mov snake_x, dh                         ;reset lai toa do ban dau con ran duoc in ra
     mov dl, 40                              ;gan toa_do_x con ran = dl
-    mov snake_y, dl                         ;reset lai toa do ban dau con ran duoc in ra
+    mov snake_y, dl                         ;reset lai toa_do ban dau con ran duoc in ra
     mov old_key, 'g'                        ;reset lai huong di chuyen cu la 1 ki tu khong phai phim dieu khien
     mov cl, 0                               ;reset chieu dai con ran ve 0
     mov len_snake, cl  
@@ -473,13 +465,46 @@ huongdan proc
     call xoa_man_hinh           ;xoa het ki tu xuat hien tren man hinh
     mov dh, begin_row           ;khoi tao hang dau tien
     mov dl, begin_column        ;khoi tao cot dau tien
-    di_chuyen_con_tro 5, 0         ;di chuyen con tro toi vi tri 5, 22 
-    pusha
-    mov ah,9
-    mov dh,0
-    mov dx, offset hd1
-    int 21h
-    popa
+    di_chuyen_con_tro dh, dl    ;di chuyen con tro toi vi tri dh, dl
+    in_thong_bao hd1            ;in thong bao huong dan 1
+   
+    add dh, 2                   ;tang hang them 2 va thuc hien in tiep
+    di_chuyen_con_tro dh, dl    ;di chuyen con tro toi vi tri dh, dl
+    in_thong_bao hd2            ;in thong bao hd2
+    
+    add dl, 10                  ;tang cot them 10 de in huong dan cac phim dieu khien
+    add dh, 2                   ;tang hang them 2 va thuc hien in tiep
+    di_chuyen_con_tro dh, dl    ;di chuyen con tro toi vi tri dh, dl
+    in_thong_bao hd4            ;in hd4
+    add dh, 1                   ;tang dh = chi so hang len 1
+    di_chuyen_con_tro dh, dl    ;di chuyen con tro toi vi tri dh, dl
+    in_thong_bao hd5            ;in hd5
+    add dh, 1                   ;tang chi so hang dh toi hang tiep theo
+    di_chuyen_con_tro dh, dl    ;di chuyen con tro toi vi tri dh, dl
+    in_thong_bao hd6            ;in hd6
+    add dh, 1                   ;tang chi so hang dh toi hang tiep theo
+    di_chuyen_con_tro dh, dl    ;di chuyen con tro toi vi tri dh, dl
+    in_thong_bao hd7            ;in hd7
+    
+    add dh, 3                   ;tang chi so hang dh len 3
+    sub dl, 10                  ;giam chi so cot dl xuong 10
+    di_chuyen_con_tro dh, dl    ;di chuyen con tro toi vi tri dh, dl
+    in_thong_bao hd8            ;in thong bao hd8
+    
+    add dl, 5                   ;tang chi so cot dl len 5
+    add dh, 1                   ;tang chi so hang dh len 1 xuong hang tiep theo
+    di_chuyen_con_tro dh, dl    ;di chuyen con tro toi vi tri dh, dl
+    in_thong_bao hd9            ;in thong bao hd9
+    add dh, 1                   ;tang chi so hang toi hang tiep theo
+    di_chuyen_con_tro dh, dl    ;di chuyen con tro toi vi tri dh, dl
+    in_thong_bao hd10           ;in hd10
+    add dh, 1                   ;tang chi so hang toi vi tri tiep theo
+    di_chuyen_con_tro dh, dl    ;di chuyen con tro toi vi tri dh, dl
+    in_thong_bao hd11           ;in hd11
+    add dh, 1                   ;tang chi so hang toi vi tri tiep theo
+    di_chuyen_con_tro dh, dl    ;di chuyen con tro toi vi tri dh,dl
+    in_thong_bao hd12           ;in hd12
+    
     ret                         ;return
 huongdan endp
 
@@ -511,3 +536,5 @@ xoa_man_hinh proc
     int 10h           ; goi ham ngat 10h de thuc hien lenh xoa
     ret 
 xoa_man_hinh endp
+
+
