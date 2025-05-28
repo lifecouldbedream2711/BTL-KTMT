@@ -58,7 +58,8 @@
      old_key db 'g'                                                   ;huong cu cua con ran
      border_row db 40 dup("#"), "$"
      border_rest db  "#", 38  dup(" "),"#","$"                                   ;hang rao nam ngang
-     dau_ran db 2D
+     than_ran db 2D
+     
 .code
 
 ;sinh ngau nhien 1 so c trong khoang tu a toi b (la so chan)
@@ -217,7 +218,7 @@ choi proc
     them_toa_do_snake snake_x, snake_y  ;them toa do ran ban dau  
     call in_ran                         ;in hinh con ran ban dau
     ;khoi tao 10 qua tao ban dau
-    mov cx, 10      ;so qua tao ban dau luu vao thanh ghi cx = 10
+    mov cx, 5      ;so qua tao ban dau luu vao thanh ghi cx = 10
     sinh_tao_ban_dau:
          call sinh_apple        ;goi chuong trinh con sinh ngau nhien 1 qua tao
     loop sinh_tao_ban_dau
@@ -266,7 +267,6 @@ choi proc
     
         ;cac huong di chuyen cua con ran    
 len_tren:
-    mov dau_ran,30
     cmp bl, 's'                     ;neu huong cu la di xuong (nguoc huong hien tai) thi chuong trinh khong chap nhan
     je game_loop                    ;quay lai nhap ki tu khac
     mov old_key, 'w'                ;neu hop le -> huong hien tai tro thanh huong cu moi 
@@ -274,7 +274,6 @@ len_tren:
     jmp check                       ;nhay den ham kiem tra
 
 xuong_duoi:
-    mov dau_ran,31
     cmp bl, 'w'                     ;neu huong cu la di xuong (nguoc huong hien tai) thi chuong trinh khong chap nhan
     je game_loop                    ;quay lai nhap ki tu khac
     mov old_key, 's'                ;neu hop le -> huong hien tai tro thanh huong cu moi
@@ -282,15 +281,13 @@ xuong_duoi:
     jmp check                       ;nhay den ham kiem tra
 
 sang_trai:
-    mov dau_ran,17
     cmp bl, 'd'                     ;neu huong cu la di xuong (nguoc huong hien tai) thi chuong trinh khong chap nhan
     je game_loop                    ;quay lai nhap ki tu khac
     mov old_key, 'a'                ;neu hop le -> huong hien tai tro thanh huong cu moi
     sub snake_y, 2                  ;tang toa_do_y con ran len 2 (vi con ran sang phai)
     jmp check                       ;nhay den ham kiem tra
 
-sang_phai:
-    mov dau_ran,16                          
+sang_phai:                          
     cmp bl, 'a'                     ;neu huong cu la di xuong (nguoc huong hien tai) thi chuong trinh khong chap nhan
     je game_loop                    ;quay lai nhap ki tu khac
     mov old_key, 'd'                ;neu hop le -> huong hien tai tro thanh huong cu moi
@@ -302,16 +299,16 @@ sang_phai:
         di_chuyen_con_tro snake_x, snake_y      ;di chuyen con tro toi vi tri dau con ran moi
         mov ah, 8                       ;chon che do doc ki tu tai vi tri con tro ham ngat 10h/08h
         mov bh, 0                       ;so trang man hinh
-        int 10h                         ;thuc hien lenh doc ki tu tai vi tri con tro   
-        
+        int 10h
+        cmp al,' '                         ;thuc hien lenh doc ki tu tai vi tri con tro   
+        je lap_tiep
         ;kiem tra con ran co dam hang rao khong
         cmp al, '#'                     ;so sanh ki tu voi hang rao '#'
         je game_over                    ;neu co thi thua luon  
         
         ;kiem tra con ran co dam vao chinh khuc cua minh khong
-        cmp al, '.'                     ;so sanh ki tu voi ki tu duoi cua con ran
-        je game_over                    ;neu co thi thua luon
-        cmp al, 'x'                     ;so sanh ki tu voi ki tu than cua con ran
+
+        cmp al, than_ran                     ;so sanh ki tu voi ki tu than cua con ran
         je game_over                    ;nhay toi nhan thua cuoc
        
         ;con ran co an qua tao khong
@@ -363,9 +360,7 @@ sinh_apple proc
     mov ah, 8                       ;chon che do doc ki tu tai vi tri con tro ham ngat 10h/08h
     mov bh, 0                       ;so trang man hinh
     int 10h
-    cmp al,'@'                      ;kiem tra vi tri co trung voi than ran khong
-    je sinh
-    cmp al,dau_ran                  ;kiem tra vi tri co trung voi dau ran khong
+    cmp al,than_ran                  ;kiem tra vi tri co trung voi dau ran khong
     je sinh 
     cmp al,'O'                      ;kiem tra vi tri co trung voi 1 qua tao khac khong
     je sinh
@@ -384,7 +379,7 @@ in_ran proc
     mov cl, len_snake                      ;luu chieu dai con ran vao thanh ghi cl
     cmp cx, 1                              ;kiem tra chieu dai = 1 thi chi in dau con ran
     jng ket                                ;thuc hien in dau con ran
-    gan_toa_do [di], [si], '@'             ;in duoi con ran
+    gan_toa_do [di], [si], than_ran             ;in duoi con ran
     
     inc di                                 ;tang chi so di (de in phan than con ran)
     inc si                                 ;tang chi so si (de in phan than con ran)
@@ -392,13 +387,13 @@ in_ran proc
         dec cx                             ;giam so than ran can in (vi da in cai duoi)
         cmp cx, 1                          ;kiem tra in het than con ran chua
         jng ket                            ;in het than con ran thi ket thuc va in dau con ran
-        gan_toa_do [di], [si], '@'         ;in than con ran
+
         
         inc si                             ;tang chi so di
         inc di                             ;tang chi so si
         jmp lapin                          ;lap lai vong lap in than con ran
     ket:
-        gan_toa_do [di], [si], dau_ran         ;in dau con ran
+        gan_toa_do [di], [si], than_ran         
     ret
 in_ran endp 
 
