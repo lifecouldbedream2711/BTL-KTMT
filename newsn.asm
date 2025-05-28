@@ -38,7 +38,7 @@
      tb_choi_lai db 'Ban co muon choi tiep khong? <y/n> $'            
      end1 db '-------- PROJECT - SNAKE GAME -------$'     
      end2 db '------------- GROUP 22 --------------$'               
-     end3 db '*********************************************$' 
+     end3 db   '*********************************************$'
      end4 db '        Thank you for playing! $'                      
      diem1 db 'Score : $'                                             ;hien diem
      dong db 13, 10, '$'                                              ;xuong dong
@@ -56,7 +56,8 @@
      score db 0                                                       ;diem nguoi choi
      score_max db 10                                                  ;diem toi da
      old_key db 'g'                                                   ;huong cu cua con ran
-     border_row db 40 dup("#"), "$"                                   ;hang rao nam ngang
+     border_row db 40 dup("#"), "$"
+     border_rest db  "#", 38  dup(" "),"#","$"                                   ;hang rao nam ngang
      dau_ran db 2D
 .code
 
@@ -332,7 +333,7 @@ sang_phai:
         them_toa_do_snake snake_x, snake_y      ;them toa do qua tao vua an vua mang luu phan than con ran
         call in_ran                             ;in hinh con ran sau khi them 1 khuc
         call sinh_apple                 ;neu khong bang thi sinh ra qua tao moi
-        call sinh_apple                 ;thuc hien sinh 2 qua tao moi
+ 
         jmp game_loop                   ;tiep tuc tro choi
     
     lap_tiep:
@@ -352,10 +353,25 @@ sang_phai:
 choi endp
 
 ;ham sinh 1 qua tao moi
-sinh_apple proc 
+sinh_apple proc
+    push ax
+    push bx 
+   sinh:
     ngau_nhien begin_row, end_row, app_x            ;tao toa_do_x cua qua tao
     ngau_nhien begin_column, end_column, app_y      ;tao toa_do_y cua qua tao
-    gan_toa_do app_x, app_y, 'O'                    ;in ra qua tao moi
+    di_chuyen_con_tro app_x, app_y      ;di chuyen con tro toi vi tri dau con ran moi
+    mov ah, 8                       ;chon che do doc ki tu tai vi tri con tro ham ngat 10h/08h
+    mov bh, 0                       ;so trang man hinh
+    int 10h
+    cmp al,'@'                      ;kiem tra vi tri co trung voi than ran khong
+    je sinh
+    cmp al,dau_ran                  ;kiem tra vi tri co trung voi dau ran khong
+    je sinh 
+    cmp al,'O'                      ;kiem tra vi tri co trung voi 1 qua tao khac khong
+    je sinh
+    gan_toa_do app_x, app_y, 'O'    ;in ra qua tao moi
+    pop bx                    
+    pop ax
     ret
 sinh_apple endp
 
